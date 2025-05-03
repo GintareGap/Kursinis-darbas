@@ -140,6 +140,19 @@ class AccountManager:
         else:
             print("\nVienas arba abu vartotojai nebuvo rasti.\n")
 
+    def remove_friend_by_username(self, username1, username2):
+        player1 = self.get_account_by_username(username1)
+        player2 = self.get_account_by_username(username2)
+        if player1 and player2:
+            if player2 in player1.friends_list():
+                player1.remove_friend(player2)
+                print(f"\n{username1} ir {username2} nebėra draugai.\n")
+            else:
+                print(f"\n{username1} ir {username2} nėra draugai.\n")
+        else:
+            print("\nVienas arba abu vartotojai nebuvo rasti.\n")
+
+
     def add_account(self, player):
         if player not in self._accounts:
             self._accounts.append(player)
@@ -246,6 +259,8 @@ if __name__ == "__main__":
     manager.add_friend_by_username("Emma_xo", "Emilai")
     manager.add_friend_by_username("Hey_Dom", "super_ona")
     manager.add_friend_by_username("Hey_Dom", "Emilai")
+
+    manager.remove_friend_by_username("Hey_Dom", "Emilai")
 
     with open("accounts_output.txt", "w", encoding="utf-8") as output_file:
         for player in manager.get_all_accounts():

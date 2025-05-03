@@ -52,20 +52,18 @@ Vartotojas: Emilija Emilaite
 Slapyvardis: Emilai
 Paskyros tipas: Standart
 Prisijungė: 2020-06-25
-Draugų skaičius: 1
+Draugų skaičius: 0
 Draugų sarašas:
-1. Hey_Dom
 
 ========================================
 Vartotojas: Domas Domaitis
 Slapyvardis: Hey_Dom
 Paskyros tipas: Premium
 Prisijungė: 2023-05-12
-Draugų skaičius: 3
+Draugų skaičius: 2
 Draugų sarašas:
 1. Emma_xo
 2. super_ona
-3. Emilai
 
 ========================================
 Vartotojas: Jonas Jonaitis

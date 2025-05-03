@@ -1,113 +1,73 @@
 import unittest
-from unittest.mock import mock_open, patch
 from datetime import datetime
-from kursinis import AccountManager, StandardAccount, PremiumAccount
+from kursinis import (
+    StandardAccount,
+    PremiumAccount,
+    AccountManager
+)
 
-
-class TestAccountFileImport(unittest.TestCase):
+class TestAccountSystem(unittest.TestCase):
 
     def setUp(self):
         self.manager = AccountManager()
+        # Reset singleton state
         self.manager._accounts.clear()
 
-    def test_valid_account_file_loading(self):
-        mock_file_data = """Jonas,Jonaitis,jonukas,2023-01-01,Standart
-Ona,Onaitė,super_ona,2023-01-05,Premium
-Emilija,Emil,Emma_xo,2023-02-10,Standart
-Dominykas,Domauskas,Hey_Dom,2023-02-15,Premium
-"""
+        self.user1 = StandardAccount("Jonas", "Jonaitis", "jonukas", datetime(2023, 1, 1))
+        self.user2 = StandardAccount("Ona", "Onaitė", "ona123", datetime(2023, 1, 2))
+        self.user3 = PremiumAccount("Petras", "Petraitis", "petras_p", datetime(2023, 1, 3))
 
-        with patch("builtins.open", mock_open(read_data=mock_file_data)):
-            with open("accounts_info.txt", "r", encoding="utf-8") as file:
-                for line in file:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    first_name, last_name, username, join_date, account_type = line.split(",")
-                    join_date = datetime.strptime(join_date, "%Y-%m-%d")
+        self.manager.add_account(self.user1)
+        self.manager.add_account(self.user2)
+        self.manager.add_account(self.user3)
 
-                    if account_type == "Standart":
-                        account = StandardAccount(first_name, last_name, username, join_date)
-                    elif account_type == "Premium":
-                        account = PremiumAccount(first_name, last_name, username, join_date)
-                    else:
-                        continue
+    def test_add_friend_success(self):
+        result = self.user1.add_friend(self.user2)
+        self.assertTrue(result)
+        self.assertIn(self.user2, self.user1.friends_list())
+        self.assertIn(self.user1, self.user2.friends_list())
 
-                    self.manager.add_account(account)
+    def test_add_friend_limit(self):
+        u = [StandardAccount(f"V{i}", f"P{i}", f"u{i}", datetime(2023, 1, 1)) for i in range(5)]
+        for user in u:
+            self.manager.add_account(user)
+            self.user1.add_friend(user)
+        sixth_friend = StandardAccount("Six", "Friend", "six", datetime(2023, 1, 1))
+        self.manager.add_account(sixth_friend)
+        result = self.user1.add_friend(sixth_friend)
+        self.assertFalse(result)
 
-        usernames = [acc.username for acc in self.manager.get_all_accounts()]
-        expected_usernames = ["jonukas", "super_ona", "Emma_xo", "Hey_Dom"]
-        self.assertCountEqual(usernames, expected_usernames)
+    def test_add_friend_premium(self):
+        self.user3.add_friend(self.user1)
+        self.assertIn(self.user1, self.user3.friends_list())
+        self.assertIn(self.user3, self.user1.friends_list())
 
-        super_ona = self.manager.get_account_by_username("super_ona")
-        self.assertEqual(super_ona.account_type, "Premium")
+    def test_update_to_premium(self):
+        updated = self.manager.update_to_premium("jonukas")
+        self.assertEqual(updated.account_type, "Premium")
+        self.assertIsInstance(updated, PremiumAccount)
 
-    def test_invalid_date_format(self):
-        mock_data = """Jonas,Jonaitis,jonukas,2023-01-01,Standart
-Ona,Onaitė,super_ona,01-05-2023,Premium
-"""
+    def test_add_friend_by_username(self):
+        self.manager.add_friend_by_username("jonukas", "ona123")
+        self.assertIn(self.user2, self.user1.friends_list())
 
-        with patch("builtins.open", mock_open(read_data=mock_data)):
-            with self.assertRaises(ValueError):
-                with open("accounts_info.txt", "r", encoding="utf-8") as file:
-                    for line in file:
-                        line = line.strip()
-                        if not line:
-                            continue
-                        first_name, last_name, username, join_date, account_type = line.split(",")
-                        # Klaidingas datos formatas:
-                        join_date = datetime.strptime(join_date, "%Y-%m-%d")
+    def test_remove_friend_by_username(self):
+        self.manager.add_friend_by_username("jonukas", "ona123")
+        self.manager.remove_friend_by_username("jonukas", "ona123")
+        self.assertNotIn(self.user2, self.user1.friends_list())
+        self.assertNotIn(self.user1, self.user2.friends_list())
 
-    def test_unknown_account_type_ignored(self):
-        mock_data = """Jonas,Jonaitis,jonukas,2023-01-01,Standart
-Kazys,Kazlauskas,kazys,2023-01-02,Gold
-Ona,Onaitė,super_ona,2023-01-05,Premium
-"""
+    def test_display_accounts(self):
+        all_output = self.manager.display_all_accounts("All")
+        self.assertIn("jonukas", all_output)
+        self.assertIn("ona123", all_output)
+        self.assertIn("petras_p", all_output)
 
-        with patch("builtins.open", mock_open(read_data=mock_data)):
-            with open("accounts_info.txt", "r", encoding="utf-8") as file:
-                for line in file:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    first_name, last_name, username, join_date, account_type = line.split(",")
-                    join_date = datetime.strptime(join_date, "%Y-%m-%d")
-
-                    if account_type == "Standart":
-                        account = StandardAccount(first_name, last_name, username, join_date)
-                    elif account_type == "Premium":
-                        account = PremiumAccount(first_name, last_name, username, join_date)
-                    else:
-                        continue
-
-                    self.manager.add_account(account)
-
-        usernames = [acc.username for acc in self.manager.get_all_accounts()]
-        self.assertIn("jonukas", usernames)
-        self.assertIn("super_ona", usernames)
-        self.assertNotIn("kazys", usernames)
-
-    def test_empty_file(self):
-        mock_data = ""  # Tuščias failas
-
-        with patch("builtins.open", mock_open(read_data=mock_data)):
-            with open("accounts_info.txt", "r", encoding="utf-8") as file:
-                for line in file:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    first_name, last_name, username, join_date, account_type = line.split(",")
-                    join_date = datetime.strptime(join_date, "%Y-%m-%d")
-                    if account_type == "Standart":
-                        account = StandardAccount(first_name, last_name, username, join_date)
-                    elif account_type == "Premium":
-                        account = PremiumAccount(first_name, last_name, username, join_date)
-                    else:
-                        continue
-                    self.manager.add_account(account)
-
-        self.assertEqual(len(self.manager.get_all_accounts()), 0)
-
+    def test_remove_account(self):
+        self.manager.add_friend_by_username("jonukas", "ona123")
+        self.manager.remove_account(self.user1)
+        self.assertNotIn(self.user1, self.manager.get_all_accounts())
+        self.assertNotIn(self.user1, self.user2.friends_list())
 
 if __name__ == "__main__":
     unittest.main()
