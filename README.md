@@ -13,6 +13,7 @@ KAIP PALEISTI PROGRAMĄ:
 KAIP NAUDOTIS PROGRAMA:
 + Žaidėjų registracijos duomenys surašomi į dokumentą "accounts_info.txt", kur vienoje eilutėje pateikiami visi duomenys atskiriant tik kableliu ir tokia tvarka: Vardas,Pavardė,Slapyvardis,Prisijungimo data(y-m-d),Paskyros tipas
 + Rašant kodo apačioje per objektą galima atlikti šiuos veiksmus su žaidėjų paskyromis nauojant jų slapyvardžius:
+  
     Pakeisti (paupdatinti) iš standartinės paskyros į premium:
     ```python
     manager.update_to_premium("jonukas")
