@@ -1,6 +1,6 @@
 # Kursinis-darbas
 
-#Introduction
+# Introduction
 
 APIE KĄ DARBAS:
 Darbo tema- Žaidimo paskyrų tvarkimas. Tai programa, kuri simuliuoja žaidėjų paskyrų duomenų registravimą, paskyrų pridėjimą/pašalinimą iš sistemos, žaidėjų tarpusavio ryšį(pridėjimas į draugus) ir galimybę standartinio tipo paskyros keitimą į premium.
