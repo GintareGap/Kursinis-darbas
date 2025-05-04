@@ -50,9 +50,10 @@ FUNKCINIAI REIKALAVIMAI:
 
 
 POLIMORFIZMAS
-  - Tai yra objektinio programavimo principas, kai metodai, esantys skirtingose klasėse bet su vienodais pavadinimais, gali atlikti skirtingus veiksmus, kurie nurodyti jų viduje.
+-Tai yra objektinio programavimo principas, kai metodai, esantys skirtingose klasėse bet su vienodais pavadinimais, gali atlikti skirtingus veiksmus, kurie nurodyti jų viduje.
 + Polimorfizmas kode:
   "add_friend()" metodas tėvinėje klasėje Account().
+  
   Skirtas draugų pridėjimui į sąrašą atitinkamo žaidėjo ir atitinkamo žaidėjo pridėjimas į to       draugo draugų sąrašą.
   ```python
   def add_friend(self, friend):
@@ -62,6 +63,7 @@ POLIMORFIZMAS
             friend._friends.append(self)
   ```
   "add_friend()" metodas dukterinėje klasėje StandardAccount().
+  
   Skirtas patikrinti, ar standartinio tipo paskyrą turintis žaidėjas neviršija nustatyto draugų     limito(5), tikrinama kreipiantis į metodą "can_add_friend", esantį toje pačioje klasėje. Jei     nevykdo "if" sąlygų, šis metodas kreipiasi į bendravardį metodą, esantį tėvinėje klasėje         Account().
   ```python
   def add_friend(self, friend):
@@ -75,6 +77,7 @@ POLIMORFIZMAS
         return True
   ```
   "add_friend()" metodas dukterinėje klasėje PremiumAccount().
+  
   Skirtas patikrinti, ar premium tipo paskyrą turintis žaidėjas nebando pridėti į draugus           žaidėją, turintį standartinio tipo paskyrą, kuris jau pasiekė draugų limitą. Jei nevykdo "if"    sąlygų, šis metodas kreipiasi į bendravardį metodą, esantį tėvinėje klasėje Account().
   ```python
   def add_friend(self, friend):
