@@ -4,7 +4,7 @@
 
 APIE KĄ DARBAS:
 
-Darbo tema- Žaidimo paskyrų tvarkymas. Tai programa, kuri simuliuoja žaidėjų paskyrų duomenų registravimą, paskyrų pridėjimą/pašalinimą iš sistemos, žaidėjų tarpusavio ryšį(pridėjimas į draugus) ir galimybę standartinio tipo paskyros keitimą į premium.
+Darbo tema- Žaidimo paskyrų tvarkymas. Tai programa, kuri simuliuoja žaidėjų paskyrų duomenų registravimą, paskyrų pridėjimą/pašalinimą iš sistemos, žaidėjų tarpusavio ryšį (pridėjimas į draugus) ir galimybę standartinio tipo paskyros keitimą į premium.
 
 KAIP PALEISTI PROGRAMĄ:
 + Atidaryti dokumentą "kursinis.py" per pasirinktą programą (Naudota "Studio Visual Code")
@@ -264,15 +264,15 @@ with open("accounts_output.txt", "w", encoding="utf-8") as output_file:
 REZULTATAI
 
 + Programa nuskaito duomenis apie kiekvieną žaidėją iš dokumento "accounts_info.txt".
-+ Pagal nurodymus programa gali: pakeisti į premium paskyrą, pašalinti/pridėti žaidėją, sukurti/pašalnti žaidėjų tarpusavio ryšį (žaidėjai prideda/pašalina vienas kitą į/iš draugų)
-+ Programa išsaugo atliktus pakeitimus, kurie tiesiogiai matomi ant ekrano ir išsisaugo sistemoje apie kiekvieną žaidėją
-+ Programoje veiksmai atliekami naudojant žaidėjo slapyvardį, kurio, pagal dabartinį kodą, negalima pakeisti
-+ Papildomas sunkumas atsiranda keičiant žaidėjo paskyros tipą, kadangi sukuriamas naujas žaidėjas su indentiška informacija, išskyrus paskyros tipas kitas. Būtina kurti naują žaidėją, nes tik taip užtikrinama, kad žaidėjas priklauso teisingai klasei ir turi preium paskyros privilegijas.
++ Pagal nurodymus programa gali: pakeisti į premium paskyrą, pašalinti/pridėti žaidėją, sukurti/pašalinti žaidėjų tarpusavio ryšį (žaidėjai prideda/pašalina vienas kitą į/iš draugų).
++ Programa išsaugo atliktus pakeitimus, kurie tiesiogiai matomi ant ekrano ir išsisaugo sistemoje apie kiekvieną žaidėją.
++ Programoje veiksmai atliekami naudojant žaidėjo slapyvardį, kurio, pagal dabartinį kodą, negalima pakeisti.
++ Papildomas sunkumas atsiranda keičiant žaidėjo paskyros tipą, kadangi sukuriamas naujas žaidėjas su indentiška informacija, išskyrus paskyros tipas kitas. Būtina kurti naują žaidėją, nes tik taip užtikrinama, kad žaidėjas priklauso teisingai klasei ir turi premium paskyros privilegijas.
 
 # Conclusions
 
 Programa, skirta žaidėjų paskyrų tvarkymui yra labai universali, kadangi programoje skaitoma ir tvarkoma standartinė informacija. Šis kodas geba perskaityti informaciją, ją išrašyti tvarkingesniu formatu, pateikti 3 skirtingus žaidėjų sąrašus, žaidėjų paskyros gali būti susietos pridedant vienas kitą į draugų sąrašą, taip pat ryšius galima panaikinti. Žaidėjų paskyras galima pakeisti iš srandartinės į premium. Naudojamas "Singleton" šablonas, kad nesusidarytų atskiri sąrašai paskyroms ir visos būtų sinchronizuotai tvarkomos.
-Ateityje būtų galima išplėsti premium paskyros privilegijas(pvz. paskyros "bio" pridėjimas). Taip pat daugiamečiai ištikimi žaidėjai galėtų "užsitarnauti" standartinės paskyros pakeitimą į premium ir kt.
+Ateityje būtų galima išplėsti premium paskyros privilegijas (pvz. paskyros "bio" pridėjimas). Taip pat daugiamečiai ištikimi žaidėjai galėtų "užsitarnauti" standartinės paskyros pakeitimą į premium ir kt.
 
 
 
