@@ -46,7 +46,7 @@ FUNKCINIAI REIKALAVIMAI:
 + Abstakcija
 + Paveldėjimas
 + Inkapsuliacija
-+ Kompozicija/Agregacija
++ Agregacija
 
 
 POLIMORFIZMAS
@@ -155,6 +155,63 @@ Paveldėjimas kode:
   ```
 
      
+INKAPSULIACIJA
+
+-Tai yra objektinio programavimo pricipas, kuris leidžia reguliuoti prieigą prie duomenų informacijos. Paslėptą arba apsaugotą informaciją gali pasiekti tik pats objektas, o išoriniai objektai turi pasitelkti sąsajas, getterius/setterius (@property). Kad kintamasis arba metodas būtų apsaugotas prirašoms vienas apatinis brūkšnelis "_", o privačiam prirašomi 2 brūkšneliai "__"
+
+  Inkapsuliacija kode:
+  
+  1) Apsaugoti kintamieji:
+     ```python
+     def __init__(self, first_name, last_name, username, join_date):
+        self._first_name = first_name
+        self._last_name = last_name
+        self._username = username
+        self._join_date = join_date
+        self._friends = []
+    ```
+  2) Apsaugotas kintamasis "_friends" pasiekiamas ir keičiamas tik per metodus "add_friend", "remove_friend", "friends_list".
+     
+  3) Apsaugoti kintamieji pasiekiami per dekoratorių "@property", kuris leidžia metodą naudoti kaip kintamąjį dėl patogesnio rašymo. (pvz. vietoj viso "self._first_name" (arba jei kitoje klasėje: "Account._first_name") galima toliau kode rašyti tiesiog "first_name")
+     ```python
+     @property
+     def first_name(self):
+        return self._first_name
+      ```
+
+
+AGREGACIJA
+
+-Tai yra pragramoje naudojamas objektų tarpusavio ryšys, kuris leidžia iš vieno kreiptis į kitą, bet neapriboja jų egzistavimo (sunaikinus vieną, kitas nesusinaikins).
+
+  Agregacija kode:
+
+  Kiekvienas žaidėjas turi draugų sąrašą, per kurį žaidėjas gali kreiptis į draugus arba draugai į žaidėją, bet panaikinus specifinio žaidėjo paskyrą, jo draugų paskyros nebus panaikamos.
+
+
+DESIGN PATTERN
+
+-Tai yra programos kodo rašymo šablonas, naudojamas, kad kodo struktūra būtų tvarkingas ir patogiau skaitomas/rašomas.
+
+Šiame kode naudojamas "Singleton" dizaino šablonas, kuris užtikrina, kad atitinkama klasė turėtų tik vieną egzempliorių, į kurį visada kreipiamasi, nepaisant koks yra objekto pavadinimas. "Singleton" šiame kode užtikrina, kad būtų tik vienas "manager" ir visi su paskyromis susiję veiksmai būtų atliekami tik viename serveryje. Dėl to visi veiksmai yra sinchronizuoti.
+```python
+class AccountManager:
+
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(AccountManager, cls).__new__(cls)
+            cls._instance._accounts = []
+        return cls._instance
+
+    def get_account_by_username(self, username):
+        for acc in self._accounts:
+            if acc.username == username:
+                return acc
+        return None
+```
+
 
 
 
