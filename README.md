@@ -50,7 +50,9 @@ FUNKCINIAI REIKALAVIMAI:
 
 
 POLIMORFIZMAS
+
 -Tai yra objektinio programavimo principas, kai metodai, esantys skirtingose klasėse bet su vienodais pavadinimais, gali atlikti skirtingus veiksmus, kurie nurodyti jų viduje.
+
 + Polimorfizmas kode:
   "add_friend()" metodas tėvinėje klasėje Account().
   
