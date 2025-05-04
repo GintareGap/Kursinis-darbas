@@ -46,7 +46,12 @@ FUNKCINIAI REIKALAVIMAI:
 + Abstakcija
 + Paveldėjimas
 + Inkapsuliacija
+
+
+PAPILDOMI REIKALAVIMAI:
 + Agregacija
++ Design pattern
++ Skaitymas/Rašymas iš dokumentų
 
 
 POLIMORFIZMAS
@@ -169,7 +174,7 @@ INKAPSULIACIJA
         self._username = username
         self._join_date = join_date
         self._friends = []
-    ```
+     
   2) Apsaugotas kintamasis "_friends" pasiekiamas ir keičiamas tik per metodus "add_friend", "remove_friend", "friends_list".
      
   3) Apsaugoti kintamieji pasiekiami per dekoratorių "@property", kuris leidžia metodą naudoti kaip kintamąjį dėl patogesnio rašymo. (pvz. vietoj viso "self._first_name" (arba jei kitoje klasėje: "Account._first_name") galima toliau kode rašyti tiesiog "first_name")
@@ -191,11 +196,11 @@ AGREGACIJA
 
 DESIGN PATTERN
 
--Tai yra programos kodo rašymo šablonas, naudojamas, kad kodo struktūra būtų tvarkingas ir patogiau skaitomas/rašomas.
+-Tai yra programos kodo rašymo šablonas, naudojamas, kad kodo struktūra būtų tvarkinga, o kodas patogiau skaitomas/rašomas.
 
-Šiame kode naudojamas "Singleton" dizaino šablonas, kuris užtikrina, kad atitinkama klasė turėtų tik vieną egzempliorių, į kurį visada kreipiamasi, nepaisant koks yra objekto pavadinimas. "Singleton" šiame kode užtikrina, kad būtų tik vienas "manager" ir visi su paskyromis susiję veiksmai būtų atliekami tik viename serveryje. Dėl to visi veiksmai yra sinchronizuoti.
+Šiame kode naudojamas "Singleton" dizaino šablonas, kuris užtikrina, kad atitinkama klasė turėtų tik vieną instanciją, į kuria visada kreipiamasi, nepaisant koks yra objekto pavadinimas. "Singleton" šiame kode užtikrina, kad būtų tik vienas "manager" ir visi su paskyromis susiję veiksmai būtų atliekami tik viename serveryje. Dėl to visi veiksmai yra sinchronizuoti.
 ```python
-class AccountManager:
+class AccountManager():
 
     _instance = None
 
@@ -211,6 +216,65 @@ class AccountManager:
                 return acc
         return None
 ```
+Galima sukurti kelis objektus klasei "AccountManager()", bet visi jie kreipsis į vieną instanciją
+```python
+manager = AccountManager()
+```
+
+SKAITYMAS/RAŠYMAS IŠ DOKUMENTŲ
+
+-Ši programa skaito iš dokumento "accounts_info.txt", kuriame pateikiami pirminiai duomenys apie žaidėjus.
+-Programa rašo į dokumentą "accounts_output.txt", kuriame pateikiami struktūrizuoti pradiniai duomenys apie kiekvieną žaidėją ir (galimai) papildyti draugų sąrašai bei pakeisti paskyrų tipai. Taip pat į dokumentą išrašomi pasirinktiniai sąrašai, tai gali būti visų paskyrų, standartinių paskyrų arba premium paskyrų sąrašai.
+
+Skaitymas:
+```python
+with open("accounts_info.txt", "r", encoding="utf-8") as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+            first_name, last_name, username, join_date, account_type = line.split(",")
+            join_date = datetime.strptime(join_date, "%Y-%m-%d")
+
+            if account_type == "Standart":
+                account = StandardAccount(first_name, last_name, username, join_date)
+            elif account_type == "Premium":
+                account = PremiumAccount(first_name, last_name, username, join_date)
+            else:
+                print(f"Nežinomas paskyros tipas: {account_type}")
+                continue
+
+            manager.add_account(account)
+```
+Rašymas:
+```python
+with open("accounts_output.txt", "w", encoding="utf-8") as output_file:
+        for player in manager.get_all_accounts():
+            output_file.write(player.get_account_info())
+            output_file.write("\n" + "=" * 40 + "\n")
+
+        output_file.write(manager.display_all_accounts("Premium"))
+        output_file.write("\n" + "=" * 40 + "\n")
+        output_file.write(manager.display_all_accounts("Standart"))
+        output_file.write("\n" + "=" * 40 + "\n")
+        output_file.write(manager.display_all_accounts())
+```
+
+
+REZULTATAI
+
++ Programa nuskaito duomenis apie kiekvieną žaidėją iš dokumento "accounts_info.txt".
++ Pagal nurodymus programa gali: pakeisti į premium paskyrą, pašalinti/pridėti žaidėją, sukurti/pašalnti žaidėjų tarpusavio ryšį (žaidėjai prideda/pašalina vienas kitą į/iš draugų)
++ Programa išsaugo atliktus pakeitimus, kurie tiesiogiai matomi ant ekrano ir išsisaugo sistemoje apie kiekvieną žaidėją
++ Programoje veiksmai atliekami naudojant žaidėjo slapyvardį, kurio, pagal dabartinį kodą, negalima pakeisti
++ Papildomas sunkumas atsiranda keičiant žaidėjo paskyros tipą, kadangi sukuriamas naujas žaidėjas su indentiška informacija, išskyrus paskyros tipas kitas. Būtina kurti naują žaidėją, nes tik taip užtikrinama, kad žaidėjas priklauso teisingai klasei ir turi preium paskyros privilegijas.
+
+# Conclusions
+
+Programa, skirta žaidėjų paskyrų tvarkymui yra labai universali, kadangi programoje skaitoma ir tvarkoma standartinė informacija. Šis kodas geba perskaityti informaciją, ją išrašyti tvarkingesniu formatu, pateikti 3 skirtingus žaidėjų sąrašus, žaidėjų paskyros gali būti susietos pridedant vienas kitą į draugų sąrašą, taip pat ryšius galima panaikinti. Žaidėjų paskyras galima pakeisti iš srandartinės į premium. Naudojamas "Singleton" šablonas, kad nesusidarytų atskiri sąrašai paskyroms ir visos būtų sinchronizuotai tvarkomos.
+Ateityje būtų galima išplėsti premium paskyros privilegijas(pvz. paskyros "bio" pridėjimas). Taip pat daugiamečiai ištikimi žaidėjai galėtų "užsitarnauti" standartinės paskyros pakeitimą į premium ir kt.
+
+
 
 
 
