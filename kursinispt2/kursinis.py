@@ -102,7 +102,7 @@ class PremiumAccount(Account):
         return True
 
 
-class AccountManager:
+class AccountManager():
 
     _instance = None
 
