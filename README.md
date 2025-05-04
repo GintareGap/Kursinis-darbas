@@ -53,9 +53,9 @@ POLIMORFIZMAS
 
 -Tai yra objektinio programavimo principas, kai metodai, esantys skirtingose klasėse, bet su vienodais pavadinimais, gali atlikti skirtingus veiksmus, kurie nurodyti jų viduje.
 
-~ Polimorfizmas kode:
+Polimorfizmas kode:
   
-  "add_friend()" metodas tėvinėje klasėje Account().
+  "add_friend()" metodas tėvinėje klasėje "Account()".
   
   Skirtas draugų pridėjimui į sąrašą atitinkamo žaidėjo ir atitinkamo žaidėjo pridėjimas į to       draugo draugų sąrašą.
   ```python
@@ -65,7 +65,7 @@ POLIMORFIZMAS
         if self not in friend._friends:
             friend._friends.append(self)
   ```
-  "add_friend()" metodas dukterinėje klasėje StandardAccount().
+  "add_friend()" metodas dukterinėje klasėje "StandardAccount()".
   
   Skirtas patikrinti, ar standartinio tipo paskyrą turintis žaidėjas neviršija nustatyto draugų     limito(5), tikrinama kreipiantis į metodą "can_add_friend", esantį toje pačioje klasėje. Jei     nevykdo "if" sąlygų, šis metodas kreipiasi į bendravardį metodą, esantį tėvinėje klasėje         Account().
   ```python
@@ -79,7 +79,7 @@ POLIMORFIZMAS
         super().add_friend(friend)
         return True
   ```
-  "add_friend()" metodas dukterinėje klasėje PremiumAccount().
+  "add_friend()" metodas dukterinėje klasėje "PremiumAccount()".
   
   Skirtas patikrinti, ar premium tipo paskyrą turintis žaidėjas nebando pridėti į draugus           žaidėją, turintį standartinio tipo paskyrą, kuris jau pasiekė draugų limitą. Jei nevykdo "if"    sąlygų, šis metodas kreipiasi į bendravardį metodą, esantį tėvinėje klasėje Account().
   ```python
@@ -90,6 +90,42 @@ POLIMORFIZMAS
         super().add_friend(friend)
         return True
   ```
+
+ABSTAKCIJA
+
+-Tai objektinio programavimo principas, kuris leidžia kurti metodus ar klases, kurie tik nurodo galimus veiksmus, bet nenurodo, kaip tie veiksmai atliekami.
+
+Abstakcija kode:
+
+  1) Bendra abstakti bazinė klasė "Accounts(ABC)", kuri negali būti iškviečiama, bet reikalinga bendram apibrėžimui 2 tipų (Standart ir Premium) paskyroms, bet nevykdo visų detalių. Klasė paveldi iš ABC (Abstact Base Class).
+     ```python
+     from abc import ABC, abstractmethod
+
+     class Account(ABC):
+     ```
+  2) Abstaktus metodas "account_type" tėvinėje klasėje "Accounts()", kuris nurodo, kad paskyra turi turėti kokį nors tipo, bet nepriskiria jokio. Dukterinėse klasėse "StandardAccount()" ir "PremiumAccoount()" pasikartoja metodas "account_type" ir tada nurodo atitinkamai paskyros tipą.
+     ```python
+     class Account(ABC):
+     
+         @abstractmethod
+         def account_type(self):
+             pass
+     ```
+
+     ```python
+     class StandardAccount(Account):
+
+          @property
+          def account_type(self):
+              return "Standart"
+     ```
+     ```python
+     class PremiumAccount(Account):
+
+          @property
+          def account_type(self):
+              return "Premium"
+     ```
 
 
 
